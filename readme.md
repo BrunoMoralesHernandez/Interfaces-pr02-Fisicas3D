@@ -63,3 +63,21 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 2](Gifs/situacion-02.gif)
 
 ---
+
+### Situación 3
+* **Configuración:**
+  * **Plano:** `Collider` estático (sin `Rigidbody`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `Collider` + `Rigidbody` cinemático (`Use Gravity = true`, `Is Kinematic = true`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * La esfera vuelve a ignorar la gravedad y fuerzas externas, por lo que se mantiene suspendida en el aire. Solo se podria mover usando un script.
+  * Al no caer la esfera, no se produce ninguna interacción con el cubo y se mantiene estático.
+  * No hay ningun movimiento visible en la escena.
+* **Justificación teórica:**
+  * La esfera pasa a ser un ***Kinematic Rigidbody Collider***. No se ve afectado por fuerzas externas y como no tiene script para su movimiento se mantiene estático.
+  * El cubo es un *Dynamic Collider*. No tiene movimiento ya esta apoyado en el plano y ningun objeto lo toca
+  * El plano actúa como superficie estática (*Static Collider*) inamovible frente a objetos dinámicos.
+* **Demostración:**  
+  ![Situación 3](Gifs/situacion-03.gif)
+
+---
