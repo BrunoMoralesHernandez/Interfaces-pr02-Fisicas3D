@@ -232,3 +232,29 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
 * **Demostración:**
 
   ![Ejercicio 2](Gifs/ejercicio-02.gif)
+
+---
+
+### Ejercicio 3: Zonas de detección con Trigger y emisión de luz
+
+* **Configuración:**
+  * **Cubo (Zona Trigger):** Objeto cubo con su componente `BoxCollider`. No necesita tener un componente `Rigidbody`, únicamente se marca la casilla `Is Trigger` en el Inspector. Dado que el personaje ya cuenta con `Rigidbody`, el motor detecta la interacción sin problema.
+  * **Material del Cubo:** Configurado con la propiedad de emisión activada en el Inspector para poder iluminarlo mediante script.
+  * **Script `OnTriggerCubo`:**
+    * Variable pública `brillo` de tipo float para ajustar la intensidad de la luz desde el Inspector.
+    * Referencia privada al componente `Renderer` del cubo.
+    * En el método `Start()`, se obtiene el componente con `GetComponent<Renderer>()` y se activa la palabra clave `_EMISSION` en el material para permitir la modificación de luz en tiempo de ejecución.
+
+* **Comportamiento observado:**
+  * Al mover al personaje hacia el cubo, este no choca físicamente ni frena el avance, sino que lo atraviesa sin resistencia.
+  * En el momento en que el personaje entra en el volumen del cubo, este se ilumina emitiendo un brillo de color amarillo, mientras que el personaje cambia su color a azul.
+  * Al salir de la zona del cubo, el brillo del cubo se apaga por completo y el personaje vuelve a su color gris original.
+
+* **Justificación teórica:**
+  * **Colisión sólida vs Trigger:** Al activar `Is Trigger`, el objeto pierde sus propiedades de colisión física (no calcula fuerzas ni rebotes) y pasa a comportarse como un sensor de volumen. Como el personaje ya posee un `Rigidbody` dinámico, no es necesario añadirle otro al cubo para disparar los eventos de paso.
+  * **Detección por eventos:** La lógica no depende de bucles en `Update()`. Se gestiona mediante dos métodos automáticos del motor de físicas:
+    * `OnTriggerEnter(Collider other)`: Se ejecuta en el instante en que un cuerpo entra en el área. Se comprueba que el objeto entrante sea el jugador antes de encender la emisión (`_EmissionColor`) y pintar al personaje.
+    * `OnTriggerExit(Collider other)`: Se ejecuta justo cuando el cuerpo abandona el volumen, restableciendo el color del jugador y apagando la emisión del material (poniendo el color en negro y el brillo a cero).
+
+* **Demostración:**  
+  ![Ejercicio 3](Gifs/ejercicio-03.gif)
