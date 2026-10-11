@@ -170,3 +170,18 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 8](Gifs/situacion-08.gif)
 
 ---
+
+### Situación 9
+* **Configuración:**
+  * **Plano:** `Collider` + `Rigidbody` cinemático (`Is Kinematic = true`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `SphereCollider` con Trigger activo (`Is Trigger = true`) + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * La esfera vuelve a verse afectada por la gravedad y cae desde su posición inicial.
+  * Al tener el trigger activado, atraviesa limpiamente tanto el cubo como el plano sin chocar ni empujarlos, continuando su caída indefinidamente hacia el vacío.
+  * El cubo se mantiene en su sitio sobre el plano sin inmutarse cuando la esfera pasa a través de él.
+* **Justificación teórica:**
+  * La esfera es un ***Dynamic Trigger Collider*** (`Rigidbody` dinámico con `Is Trigger = true`): responde a la gravedad, pero su colisionador no genera respuestas físicas de contacto (fuerzas de contacto o rebote).
+  * Los triggers están diseñados únicamente para detectar traspasos e interactuar mediante código con eventos de tipo `OnTriggerEnter`, por lo que atraviesa cualquier superficie sólida sin detenerse ni desplazar a los otros objetos.
+* **Demostración:**  
+  ![Situación 9](Gifs/situacion-09.gif)
