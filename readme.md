@@ -134,3 +134,21 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 6](Gifs/situacion-06.gif)
 
 ---
+
+### Situación 7
+* **Configuración:**
+  * **Plano:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `Collider` (con `Physic Material` de fricción) + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * Al igual que en la situación 4, todos los objetos de la escena caen al vacío sin ningún control por efecto de la gravedad.
+  * La fricción configurada en la esfera no llega a apreciarse, ya que el plano también cae y no llega a existir una superficie firme sobre la que rodar o frenarse.
+  * Desde el encuadre de la cámara únicamente se aprecia el inicio de la caída conjunta de los tres objetos antes de desaparecer.
+* **Justificación teórica:**
+  * Todos los objetos de la escena actúan como ***Dynamic Colliders*** (`Rigidbody Collider`), viéndose afectados por la gravedad y fuerzas externas sin restricciones.
+  * Al no contar con ningún ***Static Collider*** que actúe como suelo fijo, la escena entera cae al vacío.
+  * El `Physic Material` de fricción solo tiene efecto cuando hay contacto continuo y deslizamiento entre dos superficies con fuerza normal; al estar el plano cayendo a la par, el rozamiento no produce ningún efecto visible.
+* **Demostración:**  
+  ![Situación 7](Gifs/situacion-07.gif)
+
+---
