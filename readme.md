@@ -206,3 +206,29 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   * En lugar de alterar el `Transform` directamente (lo que rompería la simulación de colisiones), se utiliza `rb.MovePosition()`, garantizando que el cuerpo físico se mueva respetando los choques con el entorno y manteniendo el control total sobre la velocidad del objeto.
 * **Demostración:**  
   ![Ejercicio 1](Gifs/ejercicio-01.gif)
+
+---
+
+### Ejercicio 2: Detección de colisiones y cambio de color
+
+* **Configuración:**
+  * **Cubos de la escena:** Primitivas 3D configuradas con `BoxCollider` y `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`).
+  * **Script `ColisionCubos`:**
+    * Referencias privadas a los componentes `Rigidbody` y `Renderer` para gestionar la física y la apariencia visual.
+    * Variable booleana `colision` inicializada en `false` para controlar el estado y registrar si el cubo ya ha recibido un impacto previo.
+    * Inicialización en el método `Start()` mediante `GetComponent<Rigidbody>()` y `GetComponent<Renderer>()` para cachear los componentes desde el arranque.
+
+* **Comportamiento observado:**
+  * Al avanzar con el personaje e impactar contra los cubos, la fuerza del choque desplaza físicamente los cubos por el plano.
+  * En el instante de la colisión, el cubo impactado cambia inmediatamente su color a rojo y muestra por consola el mensaje indicando el objeto contra el que ha chocado.
+  * Debido a que el personaje cuenta con un `Rigidbody` dinámico, no tiene restricciones de rotación en sus ejes (`Freeze Rotation` desmarcado) ni materiales de fricción específicos, tras el impacto se desestabiliza fácilmente, volcando y rodando sobre la superficie del suelo.
+
+* **Justificación teórica:**
+  * **Arquitectura por eventos:** No es necesario comprobar distancias ni consultar estados continuamente dentro de `Update()` o `FixedUpdate()`. La interacción se delega por completo en el evento `OnCollisionEnter(Collision collision)`, el cual es invocado de forma automática por el motor de físicas en el milisegundo exacto del contacto entre dos cuerpos rígidos.
+  * **Filtrado de colisiones:** Es imprescindible discriminar qué objeto provoca el evento para evitar falsos positivos. Al arrancar la escena, la gravedad hace caer al cubo sobre el suelo (`Plane`); filtrando por el nombre o etiqueta del jugador se evita que el cubo cambie de color nada más empezar por tocar el piso.
+  * **Modificación visual:** Una vez validado el contacto con el personaje, se accede al material a través de la propiedad `render.material.color` y se actualiza el valor del booleano para bloquear cambios posteriores.
+  * **Dinámica física sin restricciones:** El hecho de que el cilindro ruede por el escenario tras chocar demuestra el comportamiento físico real por defecto de Unity: al no ser un objeto cinemático ni tener congelados los giros angulares, cualquier fuerza tangencial sobre su superficie curva genera un momento de inercia que lo hace rodar indefinidamente.
+
+* **Demostración:**
+
+  ![Ejercicio 2](Gifs/ejercicio-02.gif)
