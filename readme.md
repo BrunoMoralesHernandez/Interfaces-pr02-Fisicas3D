@@ -258,3 +258,37 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
 
 * **Demostración:**  
   ![Ejercicio 3](Gifs/ejercicio-03.gif)
+
+---
+
+### Ejercicio 4: Filtrado de colisiones mediante capas y Layer Collision Matrix
+
+* **Configuración:**
+  * **Creación de capas (Layers):** En el Inspector se definen tres capas de usuario personalizadas: `Jugador`, `Enemigo` y `Recolectable`.
+  * **Asignación en la escena:**
+    * El objeto del personaje se asigna a la capa `Jugador`.
+    * Los objetos de tipo enemigo se asignan a la capa `Enemigo`.
+    * Los objetos recolectables se asignan a la capa `Recolectable`, con la casilla `Is Trigger` activada en su componente `Collider`.
+  * **Ajustes en la matriz de colisiones:** Desde `Project Settings > Physics`, se configura la `Layer Collision Matrix`:
+    * Capa `Enemigo`: se mantiene activa la casilla de interacción con `Jugador` (y con `Default` para permitir el apoyo sobre el suelo). Se desactivan las casillas de colisión frente a otros enemigos y frente a recolectables.
+    * Capa `Recolectable`: se mantiene activa únicamente la casilla de interacción con la capa `Jugador`, desactivando el resto de combinaciones.
+  * **Scripts de verificación:**
+    * Script `Enemigo`: asociado a los enemigos, implementa el evento `OnCollisionEnter` para imprimir por consola el nombre del objeto y la capa con la que colisiona físicamente.
+    * Script `Recolectable`: asociado a los recolectables, implementa el evento `OnTriggerEnter` para imprimir por consola cuándo un objeto entra en su volumen de detección.
+
+* **Comportamiento observado:**
+  * Al mover al personaje contra un enemigo, se produce un choque físico sólido y la consola muestra el mensaje de impacto generado por el script del enemigo.
+  * Si dos enemigos se empujan o coinciden en el espacio, se atraviesan entre sí sin generar resistencia física ni registrar mensajes en consola.
+  * Cuando el personaje atraviesa un objeto recolectable, no se produce detención física, pero la consola confirma la activación del trigger.
+  * Si un enemigo entra en contacto con un recolectable, lo atraviesa sin que se dispare ningún evento por consola, confirmando que la matriz ignora la interacción.
+
+* **Justificación teórica:**
+  * **Filtrado previo en el motor:** La `Layer Collision Matrix` descarta pares de colisión en la fase inicial de detección física (*broadphase*). Al desmarcar casillas, Unity no evalúa geometrías ni genera eventos entre capas no relacionadas, optimizando el rendimiento.
+  * **Diferenciación entre colisión sólida y trigger:** Los enemigos operan como cuerpos rígidos sólidos mediante `OnCollisionEnter`, mientras que los recolectables funcionan exclusivamente como zonas de paso mediante `OnTriggerEnter` gracias a la propiedad `Is Trigger`.
+  * **Desacoplamiento lógico:** No es necesario comprobar mediante código qué tipo de entidad interactúa en cada momento; la matriz de capas impone las restricciones de interacción de forma global a nivel de motor.
+
+* **Demostración:**  
+  ![Ejercicio 4](Gifs/ejercicio-04.gif)
+
+---
+
