@@ -292,3 +292,31 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
 
 ---
 
+### Ejercicio 5: Aplicación de fuerzas instantáneas y materiales físicos (Physic Materials)
+
+* **Configuración:**
+  * **Materiales físicos (Physic Materials):** Se crean tres materiales físicos y se asignan a la propiedad `Material` del `Collider` de cada objeto:
+    * Material resbaladizo: valores de fricción dinámica y estática en 0 para eliminar la resistencia por rozamiento.
+    * Material rugoso: valores de fricción dinámica y estática en 1 para maximizar la resistencia al deslizamiento.
+    * Material de rebote alto: valor de `Bounciness` en 1 para conservar la energía del impacto y provocar rebotes pronunciados.
+  * **Objetos en la escena:** Esferas con componente `Collider` y `Rigidbody` dinámico para permitir la simulación de físicas y fuerzas.
+  * **Script `LanzarObjeto`:**
+    * Referencia privada al componente `Rigidbody` del objeto.
+    * Dos atributos auxiliares públicos: un `Vector3` para definir la dirección del impulso y un `float` como multiplicador para graduar la magnitud de la fuerza.
+    * Variable booleana intermediaria para registrar la pulsación de la tecla entre métodos.
+    * Inicialización en `Start()` para obtener el componente `Rigidbody` mediante `GetComponent<Rigidbody>()`.
+
+* **Comportamiento observado:**
+  * Al pulsar la tecla X, los tres objetos reciben el impulso simultáneamente y salen despedidos hacia adelante.
+  * Al impactar contra el suelo, cada objeto responde de forma totalmente distinta según el material físico asignado:
+    * El objeto resbaladizo desliza sobre la superficie recorriendo una gran distancia sin apenas perder velocidad por fricción.
+    * El objeto rugoso frena prácticamente en seco en cuanto toca el plano debido al alto rozamiento.
+    * El objeto con rebote alto rebota reiteradamente contra la superficie conservando gran parte de la energía vertical.
+
+* **Justificación teórica:**
+  * **Separación de eventos de entrada y física:** La detección de la tecla X debe realizarse en `Update()` mediante `Input.GetKeyDown()`, ya que este método lee la entrada del teclado en cada fotograma renderizado. La aplicación física de la fuerza se delega a `FixedUpdate()` a través de una bandera booleana, asegurando que el cálculo se sincronice correctamente con el paso temporal constante del motor físico (`Time.fixedDeltaTime`), restableciendo la bandera a falso inmediatamente después para no repetir el impulso en pasos posteriores.
+  * **Modo de fuerza `ForceMode.Impulse`:** Al tratarse de un impacto instantáneo que ocurre en un único instante de tiempo (y no de una fuerza sostenida en el tiempo como un propulsor), se utiliza el modo de impulso, el cual aplica directamente la variación de momento lineal teniendo en cuenta la masa del objeto.
+  * **Parámetros de fricción y restitución:** Los materiales físicos alteran las ecuaciones de contacto del motor de físicas: la fricción modifica la fuerza tangencial que se opone al movimiento de las superficies en contacto, mientras que el coeficiente de restitución (`Bounciness`) determina la fracción de energía cinética que se conserva tras la colisión.
+
+* **Demostración:**  
+  ![Ejercicio 5](Gifs/ejercicio-05.gif)
