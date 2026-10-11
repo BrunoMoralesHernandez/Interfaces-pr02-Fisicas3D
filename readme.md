@@ -46,3 +46,20 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 1](Gifs/situacion-01.gif)
 
 ---
+
+### Situación 2
+* **Configuración:**
+  * **Plano:** `Collider` estático (sin `Rigidbody`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * La esfera ahora se ve afectada por la gravedad y fuerzas externas, por lo que cae desde una altura y choca con el cubo.
+  * El cubo, al recibir el choque con la esfera, tiene un breve tambaleo (muy poco, apenas apreciable).
+  * La esfera sigue rodando sobre el plano, hasta que lo atraviesa por completo y cae al vacío.
+* **Justificación teórica:**
+  * Tanto la esfera como el cubo son ***Dynamic Colliders*** (`Rigidbody Collider`): ambos se ven afectados por la gravedad y fuerzas externas. De aquí sale el pequeño tambaleo del cubo.
+  * El plano actúa como superficie estática (*Static Collider*) inamovible frente a objetos dinámicos.
+* **Demostración:**  
+  ![Situación 2](Gifs/situacion-02.gif)
+
+---
