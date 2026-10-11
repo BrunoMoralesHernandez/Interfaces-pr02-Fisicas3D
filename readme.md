@@ -152,3 +152,21 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 7](Gifs/situacion-07.gif)
 
 ---
+
+### Situación 8
+* **Configuración:**
+  * **Plano:** `Collider` + `Rigidbody` cinemático (`Is Kinematic = true`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `SphereCollider` configurado como Trigger (`Is Trigger = true`), sin `Rigidbody`. Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * La esfera permanece suspendida en el aire en su posición inicial sin experimentar caída alguna.
+  * El plano se mantiene inmóvil en su sitio y sirve de apoyo para el cubo.
+  * El cubo se mantiene estático sobre el plano sin sufrir alteraciones al no haber interacción física con la esfera.
+* **Justificación teórica:**
+  * Al no tener `Rigidbody`, la esfera actúa como un colisionador estático (*Static Trigger Collider*), por lo que la gravedad y las fuerzas no le afectan y permanece inmóvil.
+  * Al estar configurada como Trigger, pierde la respuesta física sólida y solo sirve para detectar traspasos de otros objetos mediante eventos de código (`OnTriggerEnter`), no para generar colisiones con rebote.
+  * El plano es un ***Kinematic Rigidbody Collider***, por lo que no cae por gravedad y sostiene al cubo dinámico.
+* **Demostración:**  
+  ![Situación 8](Gifs/situacion-08.gif)
+
+---
