@@ -81,3 +81,19 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 3](Gifs/situacion-03.gif)
 
 ---
+
+### Situación 4
+- **Configuración:**
+  * **Plano:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+- **Comportamiento observado:**
+  * Todos los objetos en la escena son *Dynamic Collider* que se ven afectados por la gravedad.
+  * Al no tener un punto de apoyo, todos los objetos caen al vacío y desaparecen de la escena.
+- **Justificación teórica:**
+  * Tanto la esfera como el cubo como el plano son *Dynamic Collider*. Se ven afectados por la gravedad y fuerzas externas.
+  * No hay ningún *Static Collider* que los detenga, por lo que caen al vacío.
+- **Demostración:**  
+  ![Situación 4](Gifs/situacion-04.gif)
+
+---
