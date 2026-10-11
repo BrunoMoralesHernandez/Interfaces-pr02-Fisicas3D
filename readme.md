@@ -185,3 +185,24 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   * Los triggers están diseñados únicamente para detectar traspasos e interactuar mediante código con eventos de tipo `OnTriggerEnter`, por lo que atraviesa cualquier superficie sólida sin detenerse ni desplazar a los otros objetos.
 * **Demostración:**  
   ![Situación 9](Gifs/situacion-09.gif)
+
+---
+
+## Parte 2: Control de movimiento y scripts con Rigidbody
+
+### Ejercicio 1: Movimiento del personaje con control total
+* **Configuración:**
+  * **Objeto Personaje:** Cilindro con componente `Collider` y `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`).
+  * **Script `MoverPersonaje`:**
+    * Variable pública `speed` para modificar la velocidad cómodamente desde el Inspector.
+    * Referencia privada al componente `Rigidbody` obtenida en `Start()` mediante `GetComponent<Rigidbody>()`.
+    * Variables intermediarias para almacenar los valores de los ejes horizontal y vertical entre el `Update()` y el `FixedUpdate()`.
+* **Comportamiento observado:**
+  * El personaje responde de forma inmediata a la pulsación de las teclas WASD o las flechas de dirección.
+  * Al soltar las teclas, el personaje se detiene en seco sin deslizarse ni patinar por inercia, manteniendo en todo momento una trayectoria controlada y sin volcar.
+* **Justificación teórica:**
+  * La lectura de las entradas del teclado se realiza en el método `Update()`, ya que está sincronizado con la tasa de refresco visual por frame. Se emplea `Input.GetAxisRaw()` para obtener una respuesta inmediata (valores puros $0$ o $1$) y eliminar el suavizado progresivo.
+  * Los cálculos y la aplicación del desplazamiento se ejecutan estrictamente dentro de `FixedUpdate()`, ya que es el método dedicado a la actualización del motor de física a intervalos de tiempo constantes (`Time.fixedDeltaTime`).
+  * En lugar de alterar el `Transform` directamente (lo que rompería la simulación de colisiones), se utiliza `rb.MovePosition()`, garantizando que el cuerpo físico se mueva respetando los choques con el entorno y manteniendo el control total sobre la velocidad del objeto.
+* **Demostración:**  
+  ![Ejercicio 1](Gifs/ejercicio-01.gif)
