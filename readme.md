@@ -97,3 +97,40 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
   ![Situación 4](Gifs/situacion-04.gif)
 
 ---
+
+### Situación 5
+* **Configuración:**
+  * **Plano:** `Collider` + `Rigidbody` cinemático (`Is Kinematic = true`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`, `Mass = 1`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`, `Mass = 10`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * El plano ya no cae al vacío y se mantiene estático sirviendo de soporte para el resto de objetos.
+  * El cubo se apoya en el plano y la esfera cae afectada por la gravedad.
+  * Al impactar la esfera contra el cubo, como tiene 10 veces más masa, el desplazamiento del cubo es mucho más notorio que en la situación 2, saliendo despedido con mayor fuerza antes de que la esfera ruede y caiga del plano.
+* **Justificación teórica:**
+  * El plano es un ***Kinematic Rigidbody Collider***: no se ve afectado por la gravedad ni por fuerzas externas, por lo que actúa como un soporte fijo frente a los choques sin caerse.
+  * Tanto la esfera como el cubo son ***Dynamic Colliders*** (`Rigidbody Collider`) y responden a la gravedad e impactos.
+  * Al tener la esfera 10 veces más masa que el cubo, en el choque transmite mucha más fuerza, provocando que el cubo sufra un empuje bastante mayor.
+* **Demostración:**  
+  ![Situación 5](Gifs/situacion-05.gif)
+
+---
+
+### Situación 6
+* **Configuración:**
+  * **Plano:** `Collider` + `Rigidbody` cinemático (`Is Kinematic = true`).
+  * **Cubo:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`, `Mass = 1`). Posición inicial: $Y = 0.5$.
+  * **Esfera:** `Collider` + `Rigidbody` dinámico (`Use Gravity = true`, `Is Kinematic = false`, `Mass = 100`). Posición inicial: $X = 0.64$, $Y = 1.79$, $Z = -0.36$.
+* **Comportamiento observado:**
+  * El plano se mantiene inmóvil en su posición actuando como suelo.
+  * La esfera cae por gravedad e impacta contra el cubo con mucha más contundencia que en los casos anteriores.
+  * El impacto provoca un desplazamiento notablemente mayor en el cubo, saliendo despedido con gran fuerza.
+  * La esfera tarda más tiempo en deslizarse sobre el plano hasta llegar al borde y caer.
+* **Justificación teórica:**
+  * El plano es un ***Kinematic Rigidbody Collider***: no se ve afectado por la gravedad ni por fuerzas externas, manteniéndose firme frente a los choques.
+  * La esfera y el cubo son ***Dynamic Colliders*** (`Rigidbody Collider`) que reaccionan a la gravedad y a las fuerzas generadas por la colisión.
+  * Al tener la esfera 100 veces más masa que el cubo, la transferencia de fuerza durante el impacto es mucho mayor, desplazando al cubo con extrema facilidad. A su vez, el gran aumento de masa genera una inercia mucho mayor al interactuar con la superficie del plano.
+* **Demostración:**  
+  ![Situación 6](Gifs/situacion-06.gif)
+
+---
