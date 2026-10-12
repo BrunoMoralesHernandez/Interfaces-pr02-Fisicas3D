@@ -320,3 +320,28 @@ En este bloque se analiza el comportamiento físico y la respuesta de colisiones
 
 * **Demostración:**  
   ![Ejercicio 5](Gifs/ejercicio-05.gif)
+
+---
+
+### Ejercicio 6: Desplazamiento sin Rigidbody y detección de contacto en colisionadores estáticos
+
+* **Configuración:**
+  * **Objetos en la escena:** Tres objetos alineados en el espacio: una esfera (objeto móvil), un cubo (obstáculo intermedio) y un cilindro (objetivo de destino).
+  * **Configuración de físicas:** Todos los objetos cuentan únicamente con su respectivo componente `Collider` (`SphereCollider`, `BoxCollider` y `CapsuleCollider`), sin añadir ningún componente `Rigidbody` a ninguno de ellos.
+  * **Script en la esfera:**
+    * Referencias públicas al transform del cilindro (objetivo), al objeto del cubo (obstáculo), a la velocidad de avance y al nuevo material que se asignará al obstáculo.
+    * Inicialización en `Start()` para cachear los componentes `Collider` del cubo y de la propia esfera necesarios para evaluar la proximidad geométrica.
+    * Variable booleana de control para asegurar que el cambio de material del cubo se realice una sola vez al entrar en contacto.
+
+* **Comportamiento observado:**
+  * Al iniciar la simulación, la esfera se desplaza en línea recta dirigiéndose hacia la posición del cilindro con una velocidad constante.
+  * En el momento exacto en el que la esfera alcanza el volumen del cubo obstáculo, este cambia su material de forma instantánea al nuevo material configurado en el Inspector.
+  * Al carecer de componentes `Rigidbody` que calculen respuestas físicas de colisión sólida (bloqueo o empuje), la esfera atraviesa el cubo y continúa su trayectoria hasta detenerse sobre el cilindro objetivo.
+
+* **Justificación teórica:**
+  * **Limitación de colisionadores estáticos (*Static Colliders*):** En la arquitectura de físicas de Unity, si dos objetos en colisión carecen por completo de `Rigidbody`, el motor los clasifica como colisionadores estáticos. Bajo esta condición, el motor no evalúa impactos dinámicos ni dispara eventos del ciclo de vida de físicas como `OnCollisionEnter` u `OnTriggerEnter`.
+  * **Detección alternativa de contacto:** Para solventar la ausencia de eventos nativos de colisión sin incorporar un `Rigidbody`, la verificación de contacto se realiza por código dentro de `Update()`, comprobando la intersección geométrica de las cajas envolventes de sus colisionadores (`bounds.Intersects`) o evaluando la distancia entre sus centros respecto a las dimensiones de sus volúmenes.
+  * **Movimiento determinista con `Vector3.MoveTowards`:** La traslación se gestiona de forma cinemática modificando `transform.position`. El uso de `Vector3.MoveTowards` combinado con `Time.deltaTime` garantiza un avance continuo hacia el vector de posición del objetivo, independiente de la tasa de fotogramas por segundo, frenando exactamente en las coordenadas de destino sin oscilaciones ni sobrepasos.
+
+* **Demostración:**  
+  ![Ejercicio 6](Gifs/ejercicio-06.gif)
